@@ -1,73 +1,111 @@
-#include"./gps.h"
-//dummy until implemented
-_Bool f=1;
-char getChar(){
-    return sendChar(c);
-
-}
-//filter protocols to only get GGPGA
-//123456,UTC time,1latitude,2d,3Longitude,4D,5,7,8 ,9altit,10
-//$GPGGA,[0]202530.00,[1]5109.0262,[2]N,[3]11401.8407,[4]W,[5]5,[6]40,[7]0.5,[8]1097.36,[9]M,[10]-17.00,[11]M,[12]18,[13]TSTR*61 //80 charachters
-void filterGA(void){
-    int cnt=0;
+#include "./gps.h"
+// dummy until implemented
+_Bool f = 1, stop = 1;
+char getChar()
+{
     char c;
-    while(cnt != 7){
-        c=getChar();
-        switch (c)
+    return c;
+}
+char gp[100]; 
+// as stated above the protocol was 80 charachters we made it 100 for unexpexted situitions
+// filter protocols to only get GGPGA and GPRMC
+// 123456,UTC time,1latitude,2d,3Longitude,4D,5 ( for gps),7,8 ,9altit,10
+//$GPGGA,[0]202530.00,[1]5109.0262,[2]N,[3]11401.8407,[4]W,[5]5,[6]40,[7]0.5,[8]1097.36,[9]M,[10]-17.00,[11]M,[12]18,[13]TSTR*61 //80 charachters
+// 012345,time,vld,lat + Dir  ,long +dir   ,
+//$GPRMC,210230,A,3855.4487,N,09446.0071,W,0.0,076.2,130495,003.8,E*69
+void filterGA(void)
+{
+    int cnt = 0;
+    char c;
+    while (stop)
+    {
+        c = getChar();
+        gp[cnt++] = c;
+        if (cnt == 6)
         {
-            case '$':
-                cnt++;
-                break;
-            case 'G':
-                cnt = (cnt==1 ? 2 : (cnt==3 ? 4: (cnt==4 ? 5:0))) ;//G appears at idx 2,4,5 as shown above
-                break;
-            case 'P':
-                cnt = cnt==2?3:0;
-                break;
-            case 'A':
-                cnt = cnt==5?6:0;
-                break;
-            case '.':
-                if(cnt==6) getString();
-                if(f==1) cnt=7;
-                break;
-
+            if (gp[cnt - 2] == 'G' && gp[cnt - 1] == 'A')
+            {
+                getStr('A');
+                stop = f ? 1 : 0;
+            }
+            else if (gp[cnt - 1] == 'C')
+            {
+                getStr('C');
+                stop = f ? 1 : 0;
+            }
+            else
+            {
+                cnt = 0;
+            }
         }
     }
 }
-void getStr(){
-    char gp[100];//as stated above the protocol was 80 charachters we made it 100 for unexpexted situitions
-    int idx=0;
-    gp[idx]=getChar();
-    while(gp[idx] !='*'){
+void getStr(char c)
+{
+
+    int idx = 6;
+    gp[idx] = getChar();
+    while (gp[idx] != '*')
+    {
         idx++;
-        gp[idx]=getChar();
+        gp[idx] = getChar();
     }
-    params(gp);
+    params(c);
 }
-//we need idx : 1,2,3,4,8
+// we need idx : 2,3,4,5,9
 /*
-*1=latitude
-*3=longitude
-*8=altitude
-*/
-void params(char gp[]){
-    char values[13][20];int idx=0;
-    char * token = strtok(gp,',');
+ *1=latitude
+ *3=longitude
+ *8=altitude
+ */
+void params(char c)
+{
+    char values[14][20];
+    int idx = 0;
+    char *token = strtok(gp, ",");
     while (token != NULL)
     {
-        strcpy(values[idx++] ,token);//may change based on realtime using
-        token=strtok(NULL,',');
+        strcpy(values[idx++], token); // may change based on realtime using
+        token = strtok(NULL, ",");
     }
-    if(*values[5]=='1'){
-        //getting values
-        latit=atof(values[1]);
-        lon=atof(values[3]);
-        altit=atof(values[8]);
-        //dividing into degrees and minutes
-        latit/=100;
-        degt=(latit-(int)latit)*100;
-        lon/=100;
-        degl=(lon-(int)lon)*100;
-    }else f=0;
+    if (c == 'A')
+    {
+        if (values[6][0] == '1')
+        {
+            // getting values
+            latit = atof(values[2]);
+            latit = (values[3][0] == 'S') ? -1 * latit : latit;
+            lon = atof(values[4]);
+            lon = (values[5][0] == 'W') ? -1 * lon : lon;
+            altit = atof(values[9]);
+
+            // dividing into degrees and minutes
+            latit /= 100;
+            degt = (latit - (int)latit) * 100;
+            lon /= 100;
+            degl = (lon - (int)lon) * 100;
+        }
+        else
+            f = 0;
+    }
+    else
+    {
+        if (values[2][0] == 'A')
+        {
+            // getting values
+            latit = atof(values[3]);
+            latit = (values[4][0] == 'S') ? -1 * latit : latit;
+            lon = atof(values[5]);
+            lon = (values[6][0] == 'W') ? -1 * lon : lon;
+            altit = 0;
+
+            // dividing into degrees and minutes
+            latit /= 100;
+            degt = (latit - (int)latit) * 100;
+            lon /= 100;
+            degl = (lon - (int)lon) * 100;
+        }
+        else
+            f = 0;
+    }
 }

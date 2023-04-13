@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 char getChar();
-void getStr();
-void params(char gp[]);
+void getStr(char c);
+void params(char c);
 double lon;
 double degl;
 double latit;
