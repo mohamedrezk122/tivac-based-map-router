@@ -1,4 +1,4 @@
-#include"D:/enginnering/Spring 23/embeded/GPS_PROJ/gps.h"
+#include"./gps.h"
 //dummy until implemented
 _Bool f=1;
 int j=0;
