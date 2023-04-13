@@ -1,6 +1,8 @@
-#include"stdio.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 char getChar();
-void getString();
+void getStr();
 void params(char gp[]);
 double lon;
 double degl;

@@ -2,8 +2,7 @@
 //dummy until implemented
 _Bool f=1;
 char getChar(){
-    char c='a';
-    return c;
+    return sendChar(c);
 
 }
 //filter protocols to only get GGPGA
@@ -57,7 +56,7 @@ void params(char gp[]){
     char * token = strtok(gp,',');
     while (token != NULL)
     {
-        *values[idx++] = token;//may change based on realtime using
+        strcpy(values[idx++] ,token);//may change based on realtime using
         token=strtok(NULL,',');
     }
     if(*values[5]=='1'){
