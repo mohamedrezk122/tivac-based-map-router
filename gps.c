@@ -70,7 +70,7 @@ void params(char c)
     }
     if (c == 'A')
     {
-        if (values[6][0] == '1')
+        if (values[6][0] == '1')//check it's gps data
         {
             // getting values
             latit = atof(values[2]);
@@ -90,7 +90,7 @@ void params(char c)
     }
     else
     {
-        if (values[2][0] == 'A')
+        if (values[2][0] == 'A')//check if it's valid
         {
             // getting values
             latit = atof(values[3]);
