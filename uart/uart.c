@@ -43,6 +43,11 @@ void sendUART5(uint8_t character) {
     UART5_DR_R = character;
 }
 
+char receiveUART5() {
+    while ((UART5_FR_R & UART_FR_RXFE) != 0);   // wait till you recieve data
+    return (unsigned char)UART5_DR_R;
+}
+
 void setupUART1() {
     SYSCTL_RCGCUART_R |= SYSCTL_RCGCUART_R1; // Enable clock for UART1
     SYSCTL_RCGCGPIO_R |= SYSCTL_RCGCGPIO_R2; // Enable clock for portC GPIO pins
@@ -75,4 +80,9 @@ A function that send character through UART1.
 void sendUART1(uint8_t character) {
     while((UART1_FR_R & UART_FR_TXFF) != 0);    // wait until the transmitter buffer isn't full
     UART1_DR_R = character;
+}
+
+char receiveUART1() {
+    while ((UART1_FR_R & UART_FR_RXFE) != 0);   // wait till you recieve data
+    return (unsigned char)UART1_DR_R;
 }
