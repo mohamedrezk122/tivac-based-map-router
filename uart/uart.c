@@ -31,7 +31,7 @@ void setupUART5() {
     GPIO_PORTE_DEN_R = 0x3F;    // Digial enable all pins
     GPIO_PORTE_AMSEL_R = 0; // Disable analog mode
     GPIO_PORTE_AFSEL_R = 0x30;  // Enable alternative funcion for PE4 and PE5
-    GPIO_PORTE_PCTL_R |= (GPIO_PCTL_PE5_U5TX | GPIO_PCTL_PE4_U5RX); // PE4 and PE5 act as UART pins
+    GPIO_PORTE_PCTL_R = (GPIO_PORTE_PCTL_R & 0x00FFFF) | (GPIO_PCTL_PE5_U5TX | GPIO_PCTL_PE4_U5RX); // PE4 and PE5 act as UART pins
 
 }
 
@@ -45,7 +45,7 @@ void sendUART5(uint8_t character) {
 
 char receiveUART5() {
     while ((UART5_FR_R & UART_FR_RXFE) != 0);   // wait till you recieve data
-    return (unsigned char)UART5_DR_R;
+    return (unsigned char)(UART5_DR_R & 0xFF);
 }
 
 void setupUART1() {
@@ -70,7 +70,7 @@ void setupUART1() {
     GPIO_PORTC_AMSEL_R = 0; // Disable analog mode
     GPIO_PORTC_AFSEL_R = 0x30;  // Enable alternative funcion for PC4 and PC5
     GPIO_PORTC_DIR_R = 0x20;
-    GPIO_PORTC_PCTL_R |= (GPIO_PCTL_PC5_U1TX | GPIO_PCTL_PC4_U1RX); // PC4 and PC5 act as UART pins
+    GPIO_PORTC_PCTL_R = (GPIO_PORTC_PCTL_R & 0xFF00FFFF) | (GPIO_PCTL_PC5_U1TX | GPIO_PCTL_PC4_U1RX); // PC4 and PC5 act as UART pins
 
 }
 
@@ -84,5 +84,5 @@ void sendUART1(uint8_t character) {
 
 char receiveUART1() {
     while ((UART1_FR_R & UART_FR_RXFE) != 0);   // wait till you recieve data
-    return (unsigned char)UART1_DR_R;
+    return (unsigned char)(UART1_DR_R & 0xFF);
 }
