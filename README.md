@@ -21,6 +21,34 @@ Abdalrahman Esaam Mohamed Elemam Elemam | 1900771
 
 ## implementation
 ![](./img/1.jpeg)
+## Ports and pins Configuration
+### GPS NEO-6m
+pins  | GPIO pins
+----- | -------------
+VDD | Vbus
+GND | GND
+TX | PE4 *** uart5_rx ***
+RX | PE5 *** uart5_tx ***
+### LCD
+pins  | GPIO pins
+----- | -------------
+VDD | Vbus
+GND | GND
+V0  | POT 
+RS  | PB0
+RW  | PB1
+E   | PB2
+D4  | PB4
+D5  | PB5
+D6  | PB6
+D7  | PB7  
+## idea of working
+- When the tiva lunch it first wait for the gps to receieve sentances displaying loading
+- when it starts working we use 
+  ``` bash
+  SW1 ---> set the current location as the end point
+  SW2 ---> set the current location as the start point
+  ``` 
 ## Usage 
 
 **LINUX platforms**
