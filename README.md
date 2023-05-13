@@ -1,10 +1,25 @@
-# GPS-Tracking-System
+# GPS Tracking System
 
 Our project consists of three main components:
 1.	TM4C123GH6PM microcontroller
 2.	Ublox NEO-6m GPS Module
 3.	Trajectory Plotter web python based app
 
+## Project features
+
+- serial watchdog with esp-32 to monitor the operations and easily debug code.
+- flask web server to update the location. 
+- shortest path algorithm (A*) along with some other algorithms and structures.
+- lcd to print current latitude and longitude beside the accumulated traveled distance.
+
+## TODO
+
+- sensor fusion algorithm with IMU (gyro, accel, magnetometer) to compensate the considerable gps error, also it is a must in high speed scenarios like driving a car. The best and easy-to-implement algorithm is Extended Kalman filter.
+
+- implementing RTOS, the simplest algorithm is Round-Robin, which will prove beneficial in multi-sensor setup  
+- implementing interrupt.
+- adding simple voice commands to direct the user towards the destination
+- correction methods for the distance function
 
 ## Team Members
 
