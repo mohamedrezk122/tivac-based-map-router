@@ -19,3 +19,23 @@ Yousef Mohamed Ibrahim Mohamed | 2001496
 Mohamed Mahmoud Rezk | 2002114
 Abdalrahman Esaam Mohamed Elemam Elemam | 1900771
 
+## Usage 
+
+**LINUX platforms**
+
+- First, download the tivaware (either the full SDK version or TM4c123gxl) from [here](https://www.ti.com/tool/SW-TM4C), this step requires TI account.
+
+- Clone the project to your local machine
+ ``` bash
+git clone https://github.com/mohamedrezk122/tivac-based-map-router
+ ```
+
+- Follow this [tutorial](https://www.hackster.io/tcss/upload-code-to-ti-tm4c123-using-linux-cmake-and-lm4tools-c33cec) on how to setup lm4tools( for flashing binaries to the board), and tivaware.
+
+- Open terminal in project directory and execute the following commands
+``` bash
+mkdir build
+cmake ..
+make 
+sudo make flash   
+```
