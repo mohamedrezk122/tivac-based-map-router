@@ -1,0 +1,11 @@
+tivaware/
+
+build/
+
+plotter/*.txt
+plotter/*.html
+plotter/interface.py
+plotter/dump.py
+
+
+temp
